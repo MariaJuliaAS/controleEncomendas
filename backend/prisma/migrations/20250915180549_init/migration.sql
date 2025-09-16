@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE "public"."orders" ALTER COLUMN "delivery_date" DROP NOT NULL,
+ALTER COLUMN "contact" DROP NOT NULL,
+ALTER COLUMN "adress" DROP NOT NULL,
+ALTER COLUMN "observation" DROP NOT NULL,
+ALTER COLUMN "payment_type" DROP NOT NULL,
+ALTER COLUMN "value" DROP NOT NULL;

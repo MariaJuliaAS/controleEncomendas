@@ -1,0 +1,14 @@
+import { Request, Response } from "express";
+import { AddItemService } from "../../service/order/AddItemService";
+
+class AddItemController {
+    async handle(req: Request, res: Response) {
+        const { order_id, name } = req.body;
+        const addItemService = new AddItemService();
+        const item = await addItemService.execute({ order_id, name })
+
+        return res.json(item)
+    }
+}
+
+export { AddItemController }
