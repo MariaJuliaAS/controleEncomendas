@@ -1,4 +1,5 @@
 import { GiCardboardBoxClosed } from "react-icons/gi";
+import { Link } from "react-router-dom";
 
 export function Login() {
     return (
@@ -37,7 +38,7 @@ export function Login() {
                             type="password" />
                         <button className="my-6 bg-blue-700 rounded-lg h-10 text-white font-medium transition-all hover:scale-103 cursor-pointer">Entrar</button>
                     </form>
-                    <p className="text-center text-gray-600">Não tem uma conta? <span className="underline text-blue-800 cursor-pointer">Criar conta</span></p>
+                    <p className="text-center text-gray-600">Não tem uma conta? <Link to="/register" className="underline text-blue-800 cursor-pointer">Criar conta</Link></p>
                 </section>
             </main>
         </div>
