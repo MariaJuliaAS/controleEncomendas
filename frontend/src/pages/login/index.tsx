@@ -1,5 +1,6 @@
 import { GiCardboardBoxClosed } from "react-icons/gi";
 import { Link } from "react-router-dom";
+import { Input } from "../../components/input";
 
 export function Login() {
     return (
@@ -27,15 +28,15 @@ export function Login() {
 
                     <form className="flex flex-col">
                         <label className="text-zinc-600 font-medium my-2">Email</label>
-                        <input
-                            className="border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
+                        <Input
                             placeholder="seu@email.com"
-                            type="text" />
+                            type="text"
+                        />
                         <label className="text-zinc-600 font-medium my-2">Senha</label>
-                        <input
-                            className="border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
+                        <Input
                             placeholder="••••••••"
-                            type="password" />
+                            type="password"
+                        />
                         <button className="my-6 bg-blue-700 rounded-lg h-10 text-white font-medium transition-all hover:scale-103 cursor-pointer">Entrar</button>
                     </form>
                     <p className="text-center text-gray-600">Não tem uma conta? <Link to="/register" className="underline text-blue-800 cursor-pointer">Criar conta</Link></p>
