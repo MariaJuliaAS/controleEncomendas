@@ -2,11 +2,16 @@ import { createBrowserRouter } from "react-router-dom";
 import { Login } from "../pages/login";
 import { Register } from "../pages/register";
 import { Home } from "../pages/home";
+import { PrivateRouter } from "./privateRoutes";
 
 
 const router = createBrowserRouter([
     {
-        element: <Home />,
+        element:
+            <PrivateRouter>
+                <Home />
+            </PrivateRouter>
+        ,
         path: "/"
     },
     {
