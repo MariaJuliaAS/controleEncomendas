@@ -1,8 +1,49 @@
 import { GiCardboardBoxClosed } from "react-icons/gi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input } from "../../components/input";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { api } from "../../service/api";
+
+const schema = z.object({
+    email: z.string().email("Email inválido").nonempty("Email é obrigatório"),
+    password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres").nonempty("Senha é obrigatória"),
+});
+
+type FormData = z.infer<typeof schema>;
+
+interface LoginProps {
+    email: string;
+    password: string;
+    token: string;
+}
 
 export function Login() {
+    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+        resolver: zodResolver(schema),
+        mode: "onChange"
+    })
+    const navigate = useNavigate();
+
+    async function login(data: FormData) {
+        try {
+            const email = data.email;
+            const password = data.password;
+
+            const response = await api.post<LoginProps>("/session", {
+                email,
+                password
+            })
+
+            localStorage.setItem("@tokenOrderFlow", response.data.token)
+            navigate("/", { replace: true })
+        } catch (error) {
+            alert("Email ou senha incorretos")
+            console.log("Erro ao logar usuário " + error)
+        }
+    }
+
     return (
         <div className="w-full h-screen bg-zinc-300/10 flex items-center justify-center">
             <main className="w-full max-w-7xl flex gap-12 p-12 lg:flex-row flex-col">
@@ -26,16 +67,22 @@ export function Login() {
                         <p className="text-zinc-600 text-center sm:text-base text-sm">Entre com suas credenciais para acessar o sistema.</p>
                     </header>
 
-                    <form className="flex flex-col">
+                    <form onSubmit={handleSubmit(login)} className="flex flex-col">
                         <label className="text-zinc-600 font-medium my-2">Email</label>
                         <Input
                             placeholder="seu@email.com"
                             type="text"
+                            name="email"
+                            register={register}
+                            error={errors.email?.message}
                         />
                         <label className="text-zinc-600 font-medium my-2">Senha</label>
                         <Input
                             placeholder="••••••••"
                             type="password"
+                            name="password"
+                            register={register}
+                            error={errors.password?.message}
                         />
                         <button className="my-6 bg-blue-700 rounded-lg h-10 text-white font-medium transition-all hover:scale-103 cursor-pointer">Entrar</button>
                     </form>

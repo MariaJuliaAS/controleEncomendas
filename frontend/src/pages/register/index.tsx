@@ -1,8 +1,46 @@
 import { GiCardboardBoxClosed } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { Input } from "../../components/input";
+import z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { api } from "../../service/api";
+
+const schema = z.object({
+    name: z.string().nonempty("O nome é obrigatório."),
+    email: z.string().email("E-mail inválido.").nonempty("O e-mail é obrigatório."),
+    password: z.string().min(6, "A senha deve ter no mínino 6 caracteres.").nonempty("A senha é obrigatória.")
+})
+
+type FormData = z.infer<typeof schema>;
 
 export function Register() {
+    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+        resolver: zodResolver(schema),
+        mode: "onChange"
+    })
+    const navigate = useNavigate();
+
+    async function registerUser(data: FormData) {
+        try {
+            const name = data.name;
+            const email = data.email;
+            const password = data.password;
+
+            const response = await api.post("/users", {
+                name,
+                email,
+                password
+            })
+            alert("Cadastro realizado com sucesso!")
+            navigate("/login");
+        } catch (error) {
+            alert("Erro ao cadastrar usuário. Tente novamente.")
+            console.log("Erro ao cadastrar usuário: " + error)
+        }
+    }
+
     return (
         <div className="w-full h-screen bg-zinc-300/10 flex items-center justify-center">
             <main className="w-full max-w-7xl flex gap-12 p-12 lg:flex-row flex-col">
@@ -13,22 +51,31 @@ export function Register() {
                         <p className="text-zinc-600 text-center sm:text-base text-sm">Preencha seus dados para se cadastrar no sistema.</p>
                     </header>
 
-                    <form className="flex flex-col">
+                    <form onSubmit={handleSubmit(registerUser)} className="flex flex-col">
                         <label className="text-zinc-600 font-medium my-2">Nome</label>
                         <Input
                             placeholder="Seu nome completo"
                             type="text"
+                            name="name"
+                            register={register}
+                            error={errors.name?.message}
                         />
                         <label className="text-zinc-600 font-medium my-2">Email</label>
                         <Input
                             placeholder="seu@email.com"
                             type="text"
+                            name="email"
+                            register={register}
+                            error={errors.email?.message}
                         />
                         <label className="text-zinc-600 font-medium my-2">Senha</label>
-                        <input
-                            className="border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
+                        <Input
                             placeholder="••••••••"
-                            type="password" />
+                            type="password"
+                            name="password"
+                            register={register}
+                            error={errors.password?.message}
+                        />
                         <button className="my-6 bg-blue-700 rounded-lg h-10 text-white font-medium transition-all hover:scale-103 cursor-pointer">Entrar</button>
                     </form>
                     <p className="text-center text-gray-600">Já tem uma conta? <Link to="/login" className="underline text-blue-800 cursor-pointer">Fazer login</Link></p>
