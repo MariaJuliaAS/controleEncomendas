@@ -1,4 +1,5 @@
 import { PiSignOutBold } from "react-icons/pi";
+import { IoIosAddCircleOutline } from "react-icons/io";
 import { GiCardboardBoxClosed } from "react-icons/gi";
 import { FaUser, FaEdit, FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
@@ -42,6 +43,21 @@ export function Home() {
         loadOrders()
     }, [])
 
+    async function handleDeleteOrder(id: string) {
+        const token = localStorage.getItem("@tokenOrderFlow");
+
+        try {
+            await api.delete(`/orders?order_id=${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setOrders(orders.filter(order => order.id !== id))
+        } catch (error) {
+            console.log("Erro ao deletar encomenda " + error)
+        }
+    }
+
     return (
         <div className="w-full h-screen bg-zinc-300/10 flex items-center justify-center">
             <main className="w-full max-w-7xl p-12 h-screen">
@@ -54,9 +70,14 @@ export function Home() {
                         </h1>
                         <p className="text-zinc-600">Tenha controle do seu negócio, acompanhe cada encomenda.</p>
                     </div>
-                    <button className="cursor-pointer transition-all hover:scale-105">
-                        <PiSignOutBold size={36} className="text-zinc-800" />
-                    </button>
+                    <div>
+                        <button className="cursor-pointer transition-all hover:scale-105">
+                            <IoIosAddCircleOutline size={36} className="text-zinc-800" />
+                        </button>
+                        <button className="cursor-pointer transition-all hover:scale-105">
+                            <PiSignOutBold size={36} className="text-zinc-800" />
+                        </button>
+                    </div>
                 </header>
 
                 <section className="bg-white w-full rounded-2xl border border-gray-200 shadow-md px-8 py-4 flex max-h-9/12 overflow-y-auto">
@@ -93,7 +114,9 @@ export function Home() {
                                         <div className="flex gap-2 mt-2 lg:justify-center justify-end">
                                             <FaUser size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
                                             <FaEdit size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
-                                            <FaTrash size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
+                                            <button onClick={() => handleDeleteOrder(item.id)}>
+                                                <FaTrash size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
