@@ -1,11 +1,47 @@
 import { PiSignOutBold } from "react-icons/pi";
 import { GiCardboardBoxClosed } from "react-icons/gi";
 import { FaUser, FaEdit, FaTrash } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { api } from "../../service/api";
 /*import { IoMdSearch } from "react-icons/io";
 import { CiCirclePlus } from "react-icons/ci";
 import { Input } from "../../components/input";*/
 
+interface OrdersProps {
+    id: string;
+    name: string;
+    delivery_date: string;
+    status: string;
+    adress: string;
+    contact: string;
+    observation?: string;
+}
+
 export function Home() {
+    const [orders, setOrders] = useState<OrdersProps[]>([])
+
+    useEffect(() => {
+        async function loadOrders() {
+            const token = localStorage.getItem("@tokenOrderFlow");
+
+            try {
+                const response = await api.get<OrdersProps[]>(
+                    "/orders",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+                setOrders(response.data);
+            } catch (error) {
+                console.log("Erro ao carregar encomendas " + error)
+            }
+        }
+
+        loadOrders()
+    }, [])
+
     return (
         <div className="w-full h-screen bg-zinc-300/10 flex items-center justify-center">
             <main className="w-full max-w-7xl p-12 h-screen">
@@ -36,30 +72,32 @@ export function Home() {
                             </tr>
                         </thead>
                         <tbody className="text-left block lg:table-row-group">
-                            <tr className="border-b border-gray-200 odd:bg-white even:bg-gray-100/30 transition-all hover:odd:bg-gray-100/10 hover:even:bg-gray-100/50 block lg:table-row">
-                                <td data-label="Nome" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
-                                    Maria Júlia
-                                </td>
-                                <td data-label="Data de Entrega" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
-                                    19/10/25
-                                </td>
-                                <td data-label="Endereço" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
-                                    Rua das flores, n 10
-                                </td>
-                                <td data-label="Contato" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
-                                    84991832527
-                                </td>
-                                <td data-label="Status" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
-                                    Para comprar
-                                </td>
-                                <td data-label="Ações" className="py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
-                                    <div className="flex gap-2 mt-2 lg:justify-center justify-end">
-                                        <FaUser size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
-                                        <FaEdit size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
-                                        <FaTrash size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
-                                    </div>
-                                </td>
-                            </tr>
+                            {orders.map((item) => (
+                                <tr key={item.id} className="border-b border-gray-200 odd:bg-white even:bg-gray-100/30 transition-all hover:odd:bg-gray-100/10 hover:even:bg-gray-100/50 block lg:table-row">
+                                    <td data-label="Nome" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
+                                        {item.name}
+                                    </td>
+                                    <td data-label="Data de Entrega" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
+                                        {item.delivery_date}
+                                    </td>
+                                    <td data-label="Endereço" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
+                                        {item.adress}
+                                    </td>
+                                    <td data-label="Contato" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
+                                        {item.contact}
+                                    </td>
+                                    <td data-label="Status" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
+                                        {item.status}
+                                    </td>
+                                    <td data-label="Ações" className="py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
+                                        <div className="flex gap-2 mt-2 lg:justify-center justify-end">
+                                            <FaUser size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
+                                            <FaEdit size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
+                                            <FaTrash size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </section>
