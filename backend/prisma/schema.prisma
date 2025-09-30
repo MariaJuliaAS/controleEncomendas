@@ -34,8 +34,6 @@ model Order {
   contact       String?
   adress        String?
   observation   String?
-  payment_type  String?
-  value         String?
   itens         Iten[]
 
   created_at DateTime? @default(now())
@@ -45,8 +43,8 @@ model Order {
 }
 
 model Iten {
-  id   String @id @default(uuid())
-  name String
+  id       String @id @default(uuid())
+  nameItem String
 
   created_at DateTime? @default(now())
   updated_at DateTime? @default(now())
