@@ -11,6 +11,7 @@ import { EditOrderController } from "./controller/order/EditOrderController";
 import { EditItemController } from "./controller/order/EditItemController";
 import { ListOrdersController } from "./controller/order/ListOrdersController";
 import { ListItensController } from "./controller/order/ListItensController";
+import { DetailOrderController } from "./controller/order/DetailOrderController";
 
 const router = Router();
 
@@ -26,5 +27,6 @@ router.put("/orders", isAuthenticated, new EditOrderController().handle)
 router.put("/orders/itens", isAuthenticated, new EditItemController().handle)
 router.get("/orders", isAuthenticated, new ListOrdersController().handle)
 router.get("/orders/itens", isAuthenticated, new ListItensController().handle)
+router.get("/order", isAuthenticated, new DetailOrderController().handle)
 
 export { router }
