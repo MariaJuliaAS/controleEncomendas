@@ -9,7 +9,7 @@ import { FaTrash } from "react-icons/fa";
 import { api } from "../../service/api";
 import { useState } from "react";
 
-interface ModalProps {
+export interface ModalProps {
     closeModal: () => void;
 }
 
@@ -132,7 +132,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
         <div onClick={closeModal} className="bg-black/40 fixed inset-0 flex items-center justify-center z-10">
             <main onClick={(e) => e.stopPropagation()} className="max-h-11/12 overflow-y-auto bg-white w-11/12 max-w-xl h-auto flex flex-col rounded-lg p-8 ">
                 <header className="flex justify-between mb-2">
-                    <p className="font-medium sm:text-lg text-base text-gray-700 flex items-center">
+                    <p className="font-bold sm:text-lg text-base text-gray-700 flex items-center">
                         <IoIosAddCircleOutline size={24} className="inline mr-2 text-zinc-700" />
                         Nova Encomenda
                     </p>
@@ -141,7 +141,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
 
                 <section className="my-4">
                     <div className="border-b border-gray-200 pb-2">
-                        <p className="font-bold text-zinc-800 sm:text-lg text-base flex items-center gap-1">Dados do Cliente</p>
+                        <p className="font-medium text-zinc-800 sm:text-lg text-base flex items-center gap-1">Dados do Cliente</p>
                     </div>
 
                     <form onSubmit={handleSubmit(onSubmitOrder)} className="my-2">
@@ -226,7 +226,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
 
                 <section>
                     <div className="border-b border-gray-200 pb-2">
-                        <p className="font-bold text-zinc-800 sm:text-lg text-base flex items-center gap-1">Encomendas</p>
+                        <p className="font-medium text-zinc-800 sm:text-lg text-base flex items-center gap-1">Encomendas</p>
                     </div>
 
                     <form onSubmit={handleSubmit(onSubmitItem)} className="flex flex-row gap-2 mt-4">

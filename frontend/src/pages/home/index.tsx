@@ -5,6 +5,7 @@ import { FaUser, FaEdit, FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { api } from "../../service/api";
 import { ModalAddOrder } from "../../components/modalAddOrder";
+import { ModalDetailsOrders } from "../../components/modalDetailsOrders";
 /*import { IoMdSearch } from "react-icons/io";
 import { CiCirclePlus } from "react-icons/ci";
 import { Input } from "../../components/input";*/
@@ -21,7 +22,9 @@ interface OrdersProps {
 
 export function Home() {
     const [orders, setOrders] = useState<OrdersProps[]>([])
-    const [modalOpen, setModalOpen] = useState(false);
+    const [modalOpenAddOrder, setModalOpenAddOrder] = useState(false);
+    const [modalOpenDetailsOrder, setModalOpenDetailsOrder] = useState(false);
+    const [orderId, setOrderId] = useState("");
 
     useEffect(() => {
         async function loadOrders() {
@@ -76,7 +79,7 @@ export function Home() {
                         <p className="text-zinc-600">Tenha controle do seu negócio, acompanhe cada encomenda.</p>
                     </div>
                     <div>
-                        <button onClick={() => setModalOpen(true)} className="cursor-pointer transition-all hover:scale-105">
+                        <button onClick={() => setModalOpenAddOrder(true)} className="cursor-pointer transition-all hover:scale-105">
                             <IoIosAddCircleOutline size={36} className="text-zinc-800" />
                         </button>
                         <button className="cursor-pointer transition-all hover:scale-105">
@@ -117,7 +120,9 @@ export function Home() {
                                     </td>
                                     <td data-label="Ações" className="py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
                                         <div className="flex gap-2 mt-2 lg:justify-center justify-end">
-                                            <FaUser size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
+                                            <button onClick={() => { setModalOpenDetailsOrder(true), setOrderId(item.id) }}>
+                                                <FaUser size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
+                                            </button>
                                             <FaEdit size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
                                             <button onClick={() => handleDeleteOrder(item.id)}>
                                                 <FaTrash size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
@@ -130,7 +135,8 @@ export function Home() {
                     </table>
                 </section>
 
-                {modalOpen && <ModalAddOrder closeModal={() => setModalOpen(false)} />}
+                {modalOpenAddOrder && <ModalAddOrder closeModal={() => setModalOpenAddOrder(false)} />}
+                {modalOpenDetailsOrder && <ModalDetailsOrders id={orderId} closeModal={() => setModalOpenDetailsOrder(false)} />}
 
             </main>
         </div>
