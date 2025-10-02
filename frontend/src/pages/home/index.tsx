@@ -4,6 +4,7 @@ import { GiCardboardBoxClosed } from "react-icons/gi";
 import { FaUser, FaEdit, FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { api } from "../../service/api";
+import { ModalAddOrder } from "../../components/modalAddOrder";
 /*import { IoMdSearch } from "react-icons/io";
 import { CiCirclePlus } from "react-icons/ci";
 import { Input } from "../../components/input";*/
@@ -20,6 +21,7 @@ interface OrdersProps {
 
 export function Home() {
     const [orders, setOrders] = useState<OrdersProps[]>([])
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         async function loadOrders() {
@@ -71,7 +73,7 @@ export function Home() {
                         <p className="text-zinc-600">Tenha controle do seu negócio, acompanhe cada encomenda.</p>
                     </div>
                     <div>
-                        <button className="cursor-pointer transition-all hover:scale-105">
+                        <button onClick={() => setModalOpen(true)} className="cursor-pointer transition-all hover:scale-105">
                             <IoIosAddCircleOutline size={36} className="text-zinc-800" />
                         </button>
                         <button className="cursor-pointer transition-all hover:scale-105">
@@ -124,6 +126,8 @@ export function Home() {
                         </tbody>
                     </table>
                 </section>
+
+                {modalOpen && <ModalAddOrder closeModal={() => setModalOpen(false)} />}
 
             </main>
         </div>
