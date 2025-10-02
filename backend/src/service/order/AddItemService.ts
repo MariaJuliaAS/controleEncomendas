@@ -2,15 +2,15 @@ import prismaClient from "../../prisma";
 
 interface ItemRequest {
     order_id: string;
-    name: string
+    nameItem: string
 }
 
 class AddItemService {
-    async execute({ order_id, name }: ItemRequest) {
+    async execute({ order_id, nameItem }: ItemRequest) {
         const item = await prismaClient.iten.create({
             data: {
                 order_id: order_id,
-                name: name
+                nameItem: nameItem
             }
         })
 

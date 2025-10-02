@@ -3,9 +3,9 @@ import { AddItemService } from "../../service/order/AddItemService";
 
 class AddItemController {
     async handle(req: Request, res: Response) {
-        const { order_id, name } = req.body;
+        const { order_id, nameItem } = req.body;
         const addItemService = new AddItemService();
-        const item = await addItemService.execute({ order_id, name })
+        const item = await addItemService.execute({ order_id, nameItem })
 
         return res.json(item)
     }
