@@ -49,9 +49,12 @@ export function Home() {
         const token = localStorage.getItem("@tokenOrderFlow");
 
         try {
-            await api.delete(`/orders?order_id=${id}`, {
+            await api.delete('/orders', {
                 headers: {
                     Authorization: `Bearer ${token}`
+                },
+                params: {
+                    order_id: id
                 }
             })
             setOrders(orders.filter(order => order.id !== id))
