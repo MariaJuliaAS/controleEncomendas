@@ -2,7 +2,7 @@ import { MdOutlineClose } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { Input } from "../input";
-import z, { set } from "zod";
+import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaTrash } from "react-icons/fa";
