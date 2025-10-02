@@ -2,7 +2,7 @@ import { MdOutlineClose } from "react-icons/md";
 import { FiPlus } from "react-icons/fi";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { Input } from "../input";
-import z from "zod";
+import z, { set } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaTrash } from "react-icons/fa";
@@ -48,6 +48,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
     })
     const [idOrder, setIdOrder] = useState<string>("");
     const [items, setItems] = useState<ItemsProps[]>([]);
+    const [disabled, setDisabled] = useState<boolean>(false);
 
     async function onSubmitOrder(data: FormData) {
         try {
@@ -56,8 +57,10 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                     Authorization: `Bearer ${token}`
                 }
             })
+            const idOrder = response.data.id;
 
-            setIdOrder(response.data.id);
+            setIdOrder(idOrder);
+            setDisabled(true);
 
             alert("Pedido adicionado com sucesso!");
         } catch (error) {
@@ -107,6 +110,24 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
         }
     }
 
+    async function handleDeleteItem(id: string) {
+        try {
+            await api.delete('/orders/itens', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                params: {
+                    item_id: id
+                }
+            })
+
+            setItems(items.filter(item => item.id !== id));
+        } catch (error) {
+            console.error("Erro ao deletar item:", error);
+            alert("Erro ao deletar item.");
+        }
+    }
+
     return (
         <div onClick={closeModal} className="bg-black/40 fixed inset-0 flex items-center justify-center z-10">
             <main onClick={(e) => e.stopPropagation()} className="max-h-11/12 overflow-y-auto bg-white w-11/12 max-w-xl h-auto flex flex-col rounded-lg p-8 ">
@@ -131,6 +152,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                             name="name"
                             register={register}
                             error={errors.name?.message}
+                            disabled={disabled}
                         />
                         <div className="w-full flex flex-row gap-2 my-2">
                             <div className="flex-1">
@@ -141,6 +163,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                                     name="adress"
                                     register={register}
                                     error={errors.adress?.message}
+                                    disabled={disabled}
                                 />
                             </div>
                             <div className="flex-1">
@@ -151,6 +174,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                                     name="contact"
                                     register={register}
                                     error={errors.contact?.message}
+                                    disabled={disabled}
                                 />
                             </div>
                         </div>
@@ -159,6 +183,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                                 <label className="text-zinc-600 font-medium my-2">Status</label>
                                 <select
                                     required
+                                    disabled={disabled}
                                     id="status"
                                     {...register("status")}
                                     className="w-full border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
@@ -176,6 +201,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                                     name="delivery_date"
                                     register={register}
                                     error={errors.delivery_date?.message}
+                                    disabled={disabled}
                                 />
                             </div>
                         </div>
@@ -186,10 +212,15 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                             rows={3}
                             id="observation"
                             {...register("observation")}
+                            disabled={disabled}
                         />
+
                         <button
                             type="submit"
-                            className="w-full bg-blue-600 text-white font-medium cursor-pointer rounded-lg px-4 py-2 mt-2 transition-all hover:scale-105">✓ Salvar</button>
+                            className="w-full bg-blue-600 text-white font-medium cursor-pointer rounded-lg px-4 py-2 mt-2 transition-all hover:scale-105">
+                            ✓ Salvar
+                        </button>
+
                     </form>
                 </section>
 
@@ -222,7 +253,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                                     <>
                                         <li className="flex justify-between items-center mb-1 ">
                                             • {item.nameItem}
-                                            <button>
+                                            <button onClick={() => handleDeleteItem(item.id)}>
                                                 <FaTrash size={16} className="text-zinc-600 cursor-pointer transition-all hover:scale-110" />
                                             </button>
                                         </li>
