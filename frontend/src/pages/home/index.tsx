@@ -103,38 +103,43 @@ export function Home() {
                             </tr>
                         </thead>
                         <tbody className="text-left block lg:table-row-group">
-                            {orders.map((item) => (
-                                <tr key={item.id} className="border-b border-gray-200 odd:bg-white even:bg-gray-100/30 transition-all hover:odd:bg-gray-100/10 hover:even:bg-gray-100/50 block lg:table-row">
-                                    <td data-label="Nome" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
-                                        {item.name}
-                                    </td>
-                                    <td data-label="Data de Entrega" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
-                                        {item.delivery_date}
-                                    </td>
-                                    <td data-label="Endereço" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
-                                        {item.adress}
-                                    </td>
-                                    <td data-label="Contato" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
-                                        {item.contact}
-                                    </td>
-                                    <td data-label="Status" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
-                                        {item.status}
-                                    </td>
-                                    <td data-label="Ações" className="py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
-                                        <div className="flex gap-2 mt-2 lg:justify-center justify-end">
-                                            <button onClick={() => { setModalOpenDetailsOrder(true), setOrderId(item.id) }}>
-                                                <FaUser size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
-                                            </button>
-                                            <button onClick={() => { setModalEditOrder(true), setOrderId(item.id) }}>
-                                                <FaEdit size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
-                                            </button>
-                                            <button onClick={() => { handleDeleteOrder(item.id), setOrderId(item.id) }}>
-                                                <FaTrash size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
+                            {orders.map((item) => {
+                                const formatedDate = new Date(item.delivery_date + "T00:00:00").toLocaleDateString("pt-BR")
+                                return (
+                                    <tr key={item.id} className="border-b border-gray-200 odd:bg-white even:bg-gray-100/30 transition-all hover:odd:bg-gray-100/10 hover:even:bg-gray-100/50 block lg:table-row">
+                                        <td data-label="Nome" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
+                                            {item.name}
+                                        </td>
+                                        <td data-label="Data de Entrega" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
+                                            {formatedDate}
+                                        </td>
+                                        <td data-label="Endereço" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
+                                            {item.adress}
+                                        </td>
+                                        <td data-label="Contato" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
+                                            {item.contact}
+                                        </td>
+                                        <td data-label="Status" className="text-zinc-800 py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
+                                            {item.status}
+                                        </td>
+                                        <td data-label="Ações" className="py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
+                                            <div className="flex gap-2 mt-2 lg:justify-center justify-end">
+                                                <button onClick={() => { setModalOpenDetailsOrder(true), setOrderId(item.id) }}>
+                                                    <FaUser size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
+                                                </button>
+                                                <button onClick={() => { setModalEditOrder(true), setOrderId(item.id) }}>
+                                                    <FaEdit size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
+                                                </button>
+                                                <button onClick={() => { handleDeleteOrder(item.id), setOrderId(item.id) }}>
+                                                    <FaTrash size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+                            }
+
+                            )}
                         </tbody>
                     </table>
                 </section>
