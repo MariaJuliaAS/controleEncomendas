@@ -61,17 +61,36 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
 
     async function onSubmitOrder(data: FormDataOrder) {
         try {
-            const response = await api.post<OrdersProps>("/orders", data, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            const idOrder = response.data.id;
+            if (idOrder) {
+                await api.put("/orders", {
+                    name: data.name,
+                    status: data.status,
+                    delivery_date: data.delivery_date,
+                    contact: data.contact,
+                    adress: data.adress,
+                    observation: data.observation,
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                    params: {
+                        order_id: idOrder
+                    }
+                })
+                alert("Dados do cliente editados com sucesso.")
+            } else {
+                const response = await api.post<OrdersProps>("/orders", data, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                const idOrder = response.data.id;
 
-            setIdOrder(idOrder);
-            setDisabled(true);
+                setIdOrder(idOrder);
 
-            alert("Pedido adicionado com sucesso!");
+                alert("Pedido adicionado com sucesso!");
+            }
+            setDisabled(true)
         } catch (error) {
             console.error("Erro ao adicionar pedido:", error);
             alert("Erro ao adicionar pedido.");
@@ -153,7 +172,14 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                         <p className="font-medium text-zinc-800 sm:text-lg text-base flex items-center gap-1">Dados do Cliente</p>
                     </div>
 
-                    <form onSubmit={handleSubmitOrder(onSubmitOrder)} className="my-2">
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        if (disabled) {
+                            setDisabled(false);
+                        } else {
+                            handleSubmitOrder(onSubmitOrder)(e);
+                        }
+                    }} className="my-2">
                         <label className="text-zinc-600 font-medium my-2">Nome</label>
                         <Input
                             placeholder="Nome do cliente"
@@ -224,11 +250,21 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                             disabled={disabled}
                         />
 
-                        <button
-                            type="submit"
-                            className="w-full bg-blue-600 text-white font-medium cursor-pointer rounded-lg px-4 py-2 mt-2 transition-all hover:scale-105">
-                            ✓ Salvar
-                        </button>
+                        {
+                            disabled ? (
+                                <button
+                                    type="submit"
+                                    className="w-full bg-red-600 text-white font-medium cursor-pointer rounded-lg px-4 py-2 mt-2 transition-all hover:scale-105">
+                                    ✓ Editar
+                                </button>
+                            ) : (
+                                <button
+                                    type="submit"
+                                    className="w-full bg-blue-600 text-white font-medium cursor-pointer rounded-lg px-4 py-2 mt-2 transition-all hover:scale-105">
+                                    ✓ Salvar
+                                </button>
+                            )
+                        }
 
                     </form>
                 </section>
