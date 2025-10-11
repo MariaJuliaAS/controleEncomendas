@@ -28,29 +28,38 @@ interface ItemsProps {
     nameItem: string;
 }
 
-const schema = z.object({
+const schemaOrder = z.object({
     name: z.string().nonempty("Nome é obrigatório"),
     status: z.string().nonempty("Status é obrigatório"),
     delivery_date: z.string().optional(),
     contact: z.string().nonempty("Contato é obrigatório"),
     observation: z.string().optional(),
     adress: z.string().optional(),
-    nameItem: z.string(),
+
 })
 
-type FormData = z.infer<typeof schema>;
+const schemaItem = z.object({
+    nameItem: z.string().nonempty("Adicione a encomenda."),
+})
+
+type FormDataOrder = z.infer<typeof schemaOrder>;
+type FormDataItem = z.infer<typeof schemaItem>;
 
 export function ModalAddOrder({ closeModal }: ModalProps) {
     const token = localStorage.getItem("@tokenOrderFlow");
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-        resolver: zodResolver(schema),
+    const { register: registerOrder, handleSubmit: handleSubmitOrder, formState: { errors: errorsOrder } } = useForm<FormDataOrder>({
+        resolver: zodResolver(schemaOrder),
+        mode: "onChange"
+    })
+    const { register: registerItem, handleSubmit: handleSubmitItem, formState: { errors: errorsItem } } = useForm<FormDataItem>({
+        resolver: zodResolver(schemaItem),
         mode: "onChange"
     })
     const [idOrder, setIdOrder] = useState<string>("");
     const [items, setItems] = useState<ItemsProps[]>([]);
     const [disabled, setDisabled] = useState<boolean>(false);
 
-    async function onSubmitOrder(data: FormData) {
+    async function onSubmitOrder(data: FormDataOrder) {
         try {
             const response = await api.post<OrdersProps>("/orders", data, {
                 headers: {
@@ -87,7 +96,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
         }
     }
 
-    async function onSubmitItem(data: FormData) {
+    async function onSubmitItem(data: FormDataItem) {
         try {
             if (!idOrder) {
                 alert("Adicione os dados do cliente antes.");
@@ -144,14 +153,14 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                         <p className="font-medium text-zinc-800 sm:text-lg text-base flex items-center gap-1">Dados do Cliente</p>
                     </div>
 
-                    <form onSubmit={handleSubmit(onSubmitOrder)} className="my-2">
+                    <form onSubmit={handleSubmitOrder(onSubmitOrder)} className="my-2">
                         <label className="text-zinc-600 font-medium my-2">Nome</label>
                         <Input
                             placeholder="Nome do cliente"
                             type="text"
                             name="name"
-                            register={register}
-                            error={errors.name?.message}
+                            register={registerOrder}
+                            error={errorsOrder.name?.message}
                             disabled={disabled}
                         />
                         <div className="w-full flex flex-row gap-2 my-2">
@@ -161,8 +170,8 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                                     placeholder="Endereço do cliente"
                                     type="text"
                                     name="adress"
-                                    register={register}
-                                    error={errors.adress?.message}
+                                    register={registerOrder}
+                                    error={errorsOrder.adress?.message}
                                     disabled={disabled}
                                 />
                             </div>
@@ -172,8 +181,8 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                                     placeholder="Contato do cliente"
                                     type="text"
                                     name="contact"
-                                    register={register}
-                                    error={errors.contact?.message}
+                                    register={registerOrder}
+                                    error={errorsOrder.contact?.message}
                                     disabled={disabled}
                                 />
                             </div>
@@ -185,7 +194,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                                     required
                                     disabled={disabled}
                                     id="status"
-                                    {...register("status")}
+                                    {...registerOrder("status")}
                                     className="w-full border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
                                 >
                                     <option value="Para Comprar">Para Comprar</option>
@@ -199,8 +208,8 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                                     placeholder=""
                                     type="date"
                                     name="delivery_date"
-                                    register={register}
-                                    error={errors.delivery_date?.message}
+                                    register={registerOrder}
+                                    error={errorsOrder.delivery_date?.message}
                                     disabled={disabled}
                                 />
                             </div>
@@ -211,7 +220,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                             placeholder="Observações sobre o pedido"
                             rows={3}
                             id="observation"
-                            {...register("observation")}
+                            {...registerOrder("observation")}
                             disabled={disabled}
                         />
 
@@ -229,17 +238,17 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                         <p className="font-medium text-zinc-800 sm:text-lg text-base flex items-center gap-1">Encomendas</p>
                     </div>
 
-                    <form onSubmit={handleSubmit(onSubmitItem)} className="flex flex-row gap-2 mt-4">
+                    <form onSubmit={handleSubmitItem(onSubmitItem)} className="flex flex-row gap-2 mt-4">
                         <div className="flex-2">
                             <Input
                                 placeholder="Adicionar encomenda"
                                 type="text"
                                 name="nameItem"
-                                register={register}
-                                error={errors.nameItem?.message}
+                                register={registerItem}
+                                error={errorsItem.nameItem?.message}
                             />
                         </div>
-                        <button type="submit" className="bg-blue-600 rounded-lg px-2 flex items-center justify-center cursor-pointer transition-all hover:scale-105">
+                        <button type="submit" className="bg-blue-600 rounded-lg px-2 h-10 flex items-center justify-center cursor-pointer transition-all hover:scale-105">
                             <FiPlus size={24} className="text-white mt-1" />
                         </button>
                     </form>
