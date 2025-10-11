@@ -144,9 +144,9 @@ export function Home() {
                     </table>
                 </section>
 
-                {modalOpenAddOrder && <ModalAddOrder closeModal={() => setModalOpenAddOrder(false)} />}
+                {modalOpenAddOrder && <ModalAddOrder closeModal={() => { setModalOpenAddOrder(false), window.location.reload() }} />}
                 {modalOpenDetailsOrder && <ModalDetailsOrders id={orderId} closeModal={() => setModalOpenDetailsOrder(false)} />}
-                {modalEditOrder && <ModalEditOrder id={orderId} closeModal={() => setModalEditOrder(false)} />}
+                {modalEditOrder && <ModalEditOrder id={orderId} closeModal={() => { setModalEditOrder(false), window.location.reload() }} />}
 
             </main>
         </div>
