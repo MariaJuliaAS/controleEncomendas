@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../service/api";
 import { ModalAddOrder } from "../../components/modalAddOrder";
 import { ModalDetailsOrders } from "../../components/modalDetailsOrders";
+import { ModalEditOrder } from "../../components/modalEditOrder";
 /*import { IoMdSearch } from "react-icons/io";
 import { CiCirclePlus } from "react-icons/ci";
 import { Input } from "../../components/input";*/
@@ -24,6 +25,7 @@ export function Home() {
     const [orders, setOrders] = useState<OrdersProps[]>([])
     const [modalOpenAddOrder, setModalOpenAddOrder] = useState(false);
     const [modalOpenDetailsOrder, setModalOpenDetailsOrder] = useState(false);
+    const [modalEditOrder, setModalEditOrder] = useState(false);
     const [orderId, setOrderId] = useState("");
 
     useEffect(() => {
@@ -123,8 +125,10 @@ export function Home() {
                                             <button onClick={() => { setModalOpenDetailsOrder(true), setOrderId(item.id) }}>
                                                 <FaUser size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
                                             </button>
-                                            <FaEdit size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
-                                            <button onClick={() => handleDeleteOrder(item.id)}>
+                                            <button onClick={() => { setModalEditOrder(true), setOrderId(item.id) }}>
+                                                <FaEdit size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
+                                            </button>
+                                            <button onClick={() => { handleDeleteOrder(item.id), setOrderId(item.id) }}>
                                                 <FaTrash size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
                                             </button>
                                         </div>
@@ -137,6 +141,7 @@ export function Home() {
 
                 {modalOpenAddOrder && <ModalAddOrder closeModal={() => setModalOpenAddOrder(false)} />}
                 {modalOpenDetailsOrder && <ModalDetailsOrders id={orderId} closeModal={() => setModalOpenDetailsOrder(false)} />}
+                {modalEditOrder && <ModalEditOrder id={orderId} closeModal={() => setModalEditOrder(false)} />}
 
             </main>
         </div>

@@ -13,7 +13,7 @@ export interface ModalProps {
     closeModal: () => void;
 }
 
-interface ApiProps {
+interface OrdersProps {
     id: string;
     name: string;
     status: string;
@@ -52,7 +52,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
 
     async function onSubmitOrder(data: FormData) {
         try {
-            const response = await api.post<ApiProps>("/orders", data, {
+            const response = await api.post<OrdersProps>("/orders", data, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

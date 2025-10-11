@@ -37,7 +37,7 @@ export function ModalDetailsOrders({ id, closeModal }: ModalProps) {
                         Authorization: `Bearer ${token}`
                     },
                     params: {
-                        id: id
+                        order_id: id
                     }
                 })
 

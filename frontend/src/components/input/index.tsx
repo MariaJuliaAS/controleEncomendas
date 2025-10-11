@@ -8,9 +8,10 @@ interface InputProps {
     error?: string;
     rules?: RegisterOptions;
     disabled?: boolean;
+    defaultValue?: string;
 }
 
-export function Input({ placeholder, type, name, register, error, rules, disabled }: InputProps) {
+export function Input({ placeholder, type, name, register, error, rules, disabled, defaultValue }: InputProps) {
     return (
         <div>
             <input
@@ -19,6 +20,7 @@ export function Input({ placeholder, type, name, register, error, rules, disable
                 type={type}
                 id={name}
                 disabled={disabled}
+                defaultValue={defaultValue}
                 {...register(name, rules)}
             />
             {error && <p className="my-1 text-red-500">{error}</p>}
