@@ -8,12 +8,10 @@ interface OrderRequest {
     contact: string;
     adress: string;
     observation: string;
-    payment_type: string;
-    value: string;
 }
 
 class EditOrderSerivce {
-    async execute({ order_id, name, status, delivery_date, contact, adress, observation, payment_type, value }: OrderRequest) {
+    async execute({ order_id, name, status, delivery_date, contact, adress, observation }: OrderRequest) {
         const order = await prismaClient.order.update({
             where: {
                 id: order_id
@@ -25,8 +23,6 @@ class EditOrderSerivce {
                 contact,
                 adress,
                 observation,
-                payment_type,
-                value
             }
         })
 

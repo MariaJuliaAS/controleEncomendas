@@ -2,17 +2,17 @@ import prismaClient from "../../prisma";
 
 interface ItemRequest {
     item_id: string;
-    name: string;
+    nameItem: string;
 }
 
 class EditItemService {
-    async execute({ item_id, name }: ItemRequest) {
+    async execute({ item_id, nameItem }: ItemRequest) {
         const item = await prismaClient.iten.update({
             where: {
                 id: item_id
             },
             data: {
-                name
+                nameItem
             }
         })
 
