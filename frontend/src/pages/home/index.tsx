@@ -96,39 +96,41 @@ export function Home() {
                     </div>
                     <div>
                         <button onClick={() => setModalOpenAddOrder(true)} className="cursor-pointer transition-all hover:scale-105">
-                            <IoIosAddCircleOutline size={36} className="text-zinc-800" />
+                            <IoIosAddCircleOutline className="text-zinc-800 md:text-4xl text-3xl" />
                         </button>
                         <button className="cursor-pointer transition-all hover:scale-105">
-                            <PiSignOutBold size={36} className="text-zinc-800" />
+                            <PiSignOutBold className="text-zinc-800 md:text-4xl text-3xl" />
                         </button>
                     </div>
                 </header>
 
                 <aside className="w-full my-12">
-                    <h3 className="mb-2 font-bold text-lg text-zinc-800 flex flex-row items-center gap-2">
-                        <CiFilter size={24} className="text-zinc-800" />
+                    <h3 className="mb-2 font-bold lg:text-lg text-base text-zinc-800 flex flex-row items-center gap-2">
+                        <CiFilter className="text-zinc-800 lg:text-2xl text-xl" />
                         Filtros
                     </h3>
-                    <nav className="w-full max-w-3xl flex flexr-row gap-4">
-                        <select
-                            className="border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
-                            value={filterStatus}
-                            onChange={(e) => setFilterStatus(e.target.value)}
-                        >
-                            <option value="Status" disabled>Status</option>
-                            <option value="Todos">Todos</option>
-                            <option value="Para Comprar">Para Comprar</option>
-                            <option value="Para Entregar">Para Entregar</option>
-                            <option value="Entregue">Entregue</option>
-                        </select>
-                        <select
-                            className="border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
-                            value={filterDate}
-                            onChange={(e) => setFilterDate(e.target.value)}
-                        >
-                            <option value="desc">Decrescente</option>
-                            <option value="asc">Crescente</option>
-                        </select>
+                    <nav className="w-full max-w-3xl flex gap-4 md:flex-row flex-col">
+                        <div className="flex flex-row gap-4">
+                            <select
+                                className="border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
+                                value={filterStatus}
+                                onChange={(e) => setFilterStatus(e.target.value)}
+                            >
+                                <option value="Status" disabled>Status</option>
+                                <option value="Todos">Todos</option>
+                                <option value="Para Comprar">Para Comprar</option>
+                                <option value="Para Entregar">Para Entregar</option>
+                                <option value="Entregue">Entregue</option>
+                            </select>
+                            <select
+                                className="border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
+                                value={filterDate}
+                                onChange={(e) => setFilterDate(e.target.value)}
+                            >
+                                <option value="desc">Decrescente</option>
+                                <option value="asc">Crescente</option>
+                            </select>
+                        </div>
                         <input
                             placeholder="Pesquise por nome, endereço, telefone..."
                             type="text"
