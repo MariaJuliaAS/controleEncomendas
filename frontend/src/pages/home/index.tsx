@@ -7,9 +7,8 @@ import { api } from "../../service/api";
 import { ModalAddOrder } from "../../components/modalAddOrder";
 import { ModalDetailsOrders } from "../../components/modalDetailsOrders";
 import { ModalEditOrder } from "../../components/modalEditOrder";
-/*import { IoMdSearch } from "react-icons/io";
-import { CiCirclePlus } from "react-icons/ci";
-import { Input } from "../../components/input";*/
+import { CiFilter } from "react-icons/ci";
+import { MdSearch } from "react-icons/md";
 
 interface OrdersProps {
     id: string;
@@ -22,7 +21,9 @@ interface OrdersProps {
 }
 
 export function Home() {
-    const [orders, setOrders] = useState<OrdersProps[]>([])
+    const [orders, setOrders] = useState<OrdersProps[]>([]);
+    const [filterStatus, setFilterStatus] = useState<string>("Status");
+    const [filterSearch, setFilterSearch] = useState<string>("");
     const [modalOpenAddOrder, setModalOpenAddOrder] = useState(false);
     const [modalOpenDetailsOrder, setModalOpenDetailsOrder] = useState(false);
     const [modalEditOrder, setModalEditOrder] = useState(false);
@@ -68,11 +69,21 @@ export function Home() {
         }
     }
 
+    const ordersFilter = orders.filter((order) => {
+        const statusFilter = filterStatus === "Todos" || filterStatus === "Status" || order.status === filterStatus;
+        const searchFilter =
+            order.name.toLowerCase().includes(filterSearch.toLowerCase()) ||
+            order.contact.includes(filterSearch) ||
+            order.adress.toLowerCase().includes(filterSearch.toLowerCase());
+
+        return statusFilter && searchFilter;
+    })
+
     return (
         <div className="w-full h-screen bg-zinc-300/10 flex items-center justify-center">
             <main className="w-full max-w-7xl p-12 h-screen">
 
-                <header className="flex  justify-between items-center w-full mb-12">
+                <header className="flex  justify-between items-center w-full">
                     <div>
                         <h1 className="text-zinc-800 font-bold lg:text-3xl md:text-2xl text-xl flex items-center gap-2">
                             Controle de Encomendas
@@ -90,6 +101,38 @@ export function Home() {
                     </div>
                 </header>
 
+                <aside className="w-full my-12">
+                    <h3 className="mb-2 font-bold text-lg text-zinc-800 flex flex-row items-center gap-2">
+                        <CiFilter size={24} className="text-zinc-800" />
+                        Filtros
+                    </h3>
+                    <nav className="w-full max-w-3xl flex flexr-row gap-4">
+                        <select
+                            className="border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
+                            value={filterStatus}
+                            onChange={(e) => setFilterStatus(e.target.value)}
+                        >
+                            <option value="Status" disabled>Status</option>
+                            <option value="Todos">Todos</option>
+                            <option value="Para Comprar">Para Comprar</option>
+                            <option value="Para Entregar">Para Entregar</option>
+                            <option value="Entregue">Entregue</option>
+                        </select>
+                        <form className="w-full flex flex-row gap-4 ">
+                            <input
+                                placeholder="Pesquise por nome, endereço, telefone..."
+                                type="text"
+                                value={filterSearch}
+                                onChange={(e) => setFilterSearch(e.target.value)}
+                                className="w-full border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
+                            />
+                            <button className="bg-blue-600 h-10 rounded-lg w-10 flex items-center justify-center cursor-pointer transition-all hover:scale-105">
+                                <MdSearch size={26} color="#fff" />
+                            </button>
+                        </form>
+                    </nav>
+                </aside>
+
                 <section className="bg-white w-full rounded-2xl border border-gray-200 shadow-md px-8 py-4 flex max-h-9/12 overflow-y-auto">
                     <table className="w-full border-collapse table-fixed block lg:table">
                         <thead className="hidden lg:table-header-group text-left">
@@ -103,7 +146,7 @@ export function Home() {
                             </tr>
                         </thead>
                         <tbody className="text-left block lg:table-row-group">
-                            {orders.map((item) => {
+                            {ordersFilter.map((item) => {
                                 const formatedDate = new Date(item.delivery_date + "T00:00:00").toLocaleDateString("pt-BR")
                                 return (
                                     <tr key={item.id} className="border-b border-gray-200 odd:bg-white even:bg-gray-100/30 transition-all hover:odd:bg-gray-100/10 hover:even:bg-gray-100/50 block lg:table-row">
