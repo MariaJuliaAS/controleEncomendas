@@ -8,7 +8,6 @@ import { ModalAddOrder } from "../../components/modalAddOrder";
 import { ModalDetailsOrders } from "../../components/modalDetailsOrders";
 import { ModalEditOrder } from "../../components/modalEditOrder";
 import { CiFilter } from "react-icons/ci";
-import { MdSearch } from "react-icons/md";
 
 interface OrdersProps {
     id: string;
@@ -24,6 +23,7 @@ export function Home() {
     const [orders, setOrders] = useState<OrdersProps[]>([]);
     const [filterStatus, setFilterStatus] = useState<string>("Status");
     const [filterSearch, setFilterSearch] = useState<string>("");
+    const [filterDate, setFilterDate] = useState<string>("desc");
     const [modalOpenAddOrder, setModalOpenAddOrder] = useState(false);
     const [modalOpenDetailsOrder, setModalOpenDetailsOrder] = useState(false);
     const [modalEditOrder, setModalEditOrder] = useState(false);
@@ -39,6 +39,9 @@ export function Home() {
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
+                        },
+                        params: {
+                            order_by: filterDate
                         }
                     }
                 );
@@ -49,7 +52,7 @@ export function Home() {
         }
 
         loadOrders()
-    }, [])
+    }, [filterDate])
 
     async function handleDeleteOrder(id: string) {
         const token = localStorage.getItem("@tokenOrderFlow");
@@ -118,18 +121,21 @@ export function Home() {
                             <option value="Para Entregar">Para Entregar</option>
                             <option value="Entregue">Entregue</option>
                         </select>
-                        <form className="w-full flex flex-row gap-4 ">
-                            <input
-                                placeholder="Pesquise por nome, endereço, telefone..."
-                                type="text"
-                                value={filterSearch}
-                                onChange={(e) => setFilterSearch(e.target.value)}
-                                className="w-full border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
-                            />
-                            <button className="bg-blue-600 h-10 rounded-lg w-10 flex items-center justify-center cursor-pointer transition-all hover:scale-105">
-                                <MdSearch size={26} color="#fff" />
-                            </button>
-                        </form>
+                        <select
+                            className="border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
+                            value={filterDate}
+                            onChange={(e) => setFilterDate(e.target.value)}
+                        >
+                            <option value="desc">Decrescente</option>
+                            <option value="asc">Crescente</option>
+                        </select>
+                        <input
+                            placeholder="Pesquise por nome, endereço, telefone..."
+                            type="text"
+                            value={filterSearch}
+                            onChange={(e) => setFilterSearch(e.target.value)}
+                            className="w-full border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
+                        />
                     </nav>
                 </aside>
 
