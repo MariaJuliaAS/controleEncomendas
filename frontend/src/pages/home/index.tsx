@@ -72,6 +72,11 @@ export function Home() {
         }
     }
 
+    function signOut() {
+        localStorage.removeItem("@tokenOrderFlow");
+        window.location.reload();
+    }
+
     const ordersFilter = orders.filter((order) => {
         const statusFilter = filterStatus === "Todos" || filterStatus === "Status" || order.status === filterStatus;
         const searchFilter =
@@ -98,7 +103,7 @@ export function Home() {
                         <button onClick={() => setModalOpenAddOrder(true)} className="cursor-pointer transition-all hover:scale-105">
                             <IoIosAddCircleOutline className="text-zinc-800 md:text-4xl text-3xl" />
                         </button>
-                        <button className="cursor-pointer transition-all hover:scale-105">
+                        <button onClick={signOut} className="cursor-pointer transition-all hover:scale-105">
                             <PiSignOutBold className="text-zinc-800 md:text-4xl text-3xl" />
                         </button>
                     </div>
