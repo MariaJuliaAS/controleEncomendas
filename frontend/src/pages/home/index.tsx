@@ -8,6 +8,7 @@ import { ModalAddOrder } from "../../components/modalAddOrder";
 import { ModalDetailsOrders } from "../../components/modalDetailsOrders";
 import { ModalEditOrder } from "../../components/modalEditOrder";
 import { CiFilter } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 
 interface OrdersProps {
     id: string;
@@ -28,6 +29,7 @@ export function Home() {
     const [modalOpenDetailsOrder, setModalOpenDetailsOrder] = useState(false);
     const [modalEditOrder, setModalEditOrder] = useState(false);
     const [orderId, setOrderId] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function loadOrders() {
@@ -74,7 +76,7 @@ export function Home() {
 
     function signOut() {
         localStorage.removeItem("@tokenOrderFlow");
-        window.location.reload();
+        navigate("/login", { replace: true })
     }
 
     const ordersFilter = orders.filter((order) => {
