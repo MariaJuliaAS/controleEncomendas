@@ -28,7 +28,7 @@ export function Register() {
             const email = data.email;
             const password = data.password;
 
-            const response = await api.post("/users", {
+            await api.post("/users", {
                 name,
                 email,
                 password
@@ -42,7 +42,7 @@ export function Register() {
     }
 
     return (
-        <div className="w-full h-screen bg-zinc-300/10 flex items-center justify-center">
+        <div className="w-full sm:h-screen h-full bg-zinc-300/10 flex items-center justify-center">
             <main className="w-full max-w-7xl flex gap-12 p-12 lg:flex-row flex-col">
 
                 <section className="flex flex-1 flex-col p-6 bg-white rounded-2xl border-gray-200 border shadow-2xl">
@@ -76,13 +76,13 @@ export function Register() {
                             register={register}
                             error={errors.password?.message}
                         />
-                        <button className="my-6 bg-blue-700 rounded-lg h-10 text-white font-medium transition-all hover:scale-103 cursor-pointer">Entrar</button>
+                        <button className="my-6 bg-blue-600 rounded-lg h-10 text-white font-medium transition-all hover:scale-103 cursor-pointer">Entrar</button>
                     </form>
                     <p className="text-center text-gray-600">Já tem uma conta? <Link to="/login" className="underline text-blue-800 cursor-pointer">Fazer login</Link></p>
                 </section>
-                <section className="flex flex-1 items-center justify-center flex-col p-2 lg:mt-0 mt-28 ">
+                <section className="flex flex-1 items-center justify-center flex-col p-2">
                     <header className="flex flex-col mb-4 items-center gap-4">
-                        <div className="bg-blue-700 rounded-lg p-1">
+                        <div className="bg-blue-600 rounded-lg p-1">
                             <GiCardboardBoxClosed color="#fff" className="md:size-28 sm:size-20 size-14" />
                         </div>
                         <h1 className="font-bold lg:text-4xl md:text-3xl text-2xl text-zinc-800">OrderFlow</h1>

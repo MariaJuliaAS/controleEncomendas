@@ -47,9 +47,9 @@ export function Login() {
     return (
         <div className="w-full h-screen bg-zinc-300/10 flex items-center justify-center">
             <main className="w-full max-w-7xl flex gap-12 p-12 lg:flex-row flex-col">
-                <section className="flex flex-1 items-center justify-center flex-col p-2 lg:mt-0 mt-28 ">
+                <section className="flex flex-1 items-center justify-center flex-col p-2  ">
                     <header className="flex flex-col mb-4 items-center gap-4">
-                        <div className="bg-blue-700 rounded-lg p-1">
+                        <div className="bg-blue-600 rounded-lg p-1">
                             <GiCardboardBoxClosed color="#fff" className="md:size-28 sm:size-20 size-14" />
                         </div>
                         <h1 className="font-bold lg:text-4xl md:text-3xl text-2xl text-zinc-800">OrderFlow</h1>
@@ -84,7 +84,7 @@ export function Login() {
                             register={register}
                             error={errors.password?.message}
                         />
-                        <button className="my-6 bg-blue-700 rounded-lg h-10 text-white font-medium transition-all hover:scale-103 cursor-pointer">Entrar</button>
+                        <button className="my-6 bg-blue-600 rounded-lg h-10 text-white font-medium transition-all hover:scale-103 cursor-pointer">Entrar</button>
                     </form>
                     <p className="text-center text-gray-600">Não tem uma conta? <Link to="/register" className="underline text-blue-800 cursor-pointer">Criar conta</Link></p>
                 </section>
