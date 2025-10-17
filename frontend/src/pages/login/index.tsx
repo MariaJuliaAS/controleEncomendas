@@ -5,6 +5,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "../../service/api";
+import toast from "react-hot-toast";
 
 const schema = z.object({
     email: z.string().email("Email inválido").nonempty("Email é obrigatório"),
@@ -41,7 +42,7 @@ export function Login() {
             localStorage.setItem("@userIdOrderFlow", response.data.id)
             navigate("/", { replace: true })
         } catch (error) {
-            alert("Email ou senha incorretos")
+            toast.error("Email ou senha incorretos")
             console.log("Erro ao logar usuário " + error)
         }
     }

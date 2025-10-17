@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FaTrash } from "react-icons/fa";
 import { api } from "../../service/api";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export interface ModalProps {
     closeModal: () => void;
@@ -78,7 +79,7 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                         order_id: idOrder
                     }
                 })
-                alert("Dados do cliente editados com sucesso.")
+                toast.success("Dados do cliente editados com sucesso.")
             } else {
                 const response = await api.post<OrdersProps>("/orders", data, {
                     headers: {
@@ -92,12 +93,12 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
 
                 setIdOrder(idOrder);
 
-                alert("Pedido adicionado com sucesso!");
+                toast.success("Pedido adicionado com sucesso!");
             }
             setDisabled(true)
         } catch (error) {
             console.error("Erro ao adicionar pedido:", error);
-            alert("Erro ao adicionar pedido.");
+            toast.error("Erro ao adicionar pedido.");
         }
     }
 
@@ -115,14 +116,13 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
             setItems(response.data);
         } catch (error) {
             console.error("Erro ao buscar itens:", error);
-            alert("Erro ao buscar itens.");
         }
     }
 
     async function onSubmitItem(data: FormDataItem) {
         try {
             if (!idOrder) {
-                alert("Adicione os dados do cliente antes.");
+                toast.error("Adicione os dados do cliente antes.");
                 return;
             }
 
@@ -135,10 +135,11 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                 }
             })
 
+            toast.success("Item adicionado com sucesso!")
             getItems(idOrder);
         } catch (error) {
             console.error("Erro ao adicionar item:", error);
-            alert("Erro ao adicionar item.");
+            toast.error("Erro ao adicionar item.");
         }
     }
 
@@ -153,10 +154,11 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                 }
             })
 
+            toast.success("Item deletaco com sucesso!")
             setItems(items.filter(item => item.id !== id));
         } catch (error) {
             console.error("Erro ao deletar item:", error);
-            alert("Erro ao deletar item.");
+            toast.error("Erro ao deletar item.");
         }
     }
 

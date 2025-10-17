@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../service/api";
+import toast from "react-hot-toast";
 
 const schema = z.object({
     name: z.string().nonempty("O nome é obrigatório."),
@@ -33,10 +34,10 @@ export function Register() {
                 email,
                 password
             })
-            alert("Cadastro realizado com sucesso!")
+            toast.success("Cadastro realizado com sucesso!")
             navigate("/login");
         } catch (error) {
-            alert("Erro ao cadastrar usuário. Tente novamente.")
+            toast.error("Erro ao cadastrar usuário. Tente novamente.")
             console.log("Erro ao cadastrar usuário: " + error)
         }
     }

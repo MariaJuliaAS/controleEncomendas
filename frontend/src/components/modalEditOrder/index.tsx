@@ -6,6 +6,7 @@ import { Input } from "../input";
 import { useEffect, useState, type FormEvent } from "react";
 import { api } from "../../service/api";
 import { FaEdit, FaPen } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 interface ModalProps {
     closeModal: () => void;
@@ -97,10 +98,10 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
                     order_id: id
                 }
             })
-            alert("Dados do cliente editados com sucesso.")
+            toast.success("Dados do cliente editados com sucesso.")
         } catch (error: any) {
             console.log(error.response?.data || error.message);
-            alert("Erro ao editar encomenda: " + (error.response?.data?.message || error.message));
+            toast.error("Erro ao editar encomenda. ");
         }
     }
 
@@ -115,9 +116,9 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
                     item_id: id
                 }
             })
-            alert("Item editado com sucesso.")
+            toast.success("Item editado com sucesso.")
         } catch (error) {
-            alert("Erro ao editar item.")
+            toast.error("Erro ao editar item.")
             console.log("Erro ao editar item " + error)
         }
     }
