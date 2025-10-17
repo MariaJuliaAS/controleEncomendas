@@ -17,6 +17,7 @@ interface LoginProps {
     email: string;
     password: string;
     token: string;
+    id: string;
 }
 
 export function Login() {
@@ -37,6 +38,7 @@ export function Login() {
             })
 
             localStorage.setItem("@tokenOrderFlow", response.data.token)
+            localStorage.setItem("@userIdOrderFlow", response.data.id)
             navigate("/", { replace: true })
         } catch (error) {
             alert("Email ou senha incorretos")

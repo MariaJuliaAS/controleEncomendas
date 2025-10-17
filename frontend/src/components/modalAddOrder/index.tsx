@@ -47,6 +47,7 @@ type FormDataItem = z.infer<typeof schemaItem>;
 
 export function ModalAddOrder({ closeModal }: ModalProps) {
     const token = localStorage.getItem("@tokenOrderFlow");
+    const userId = localStorage.getItem("@userIdOrderFlow");
     const { register: registerOrder, handleSubmit: handleSubmitOrder, formState: { errors: errorsOrder } } = useForm<FormDataOrder>({
         resolver: zodResolver(schemaOrder),
         mode: "onChange"
@@ -82,6 +83,9 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                 const response = await api.post<OrdersProps>("/orders", data, {
                     headers: {
                         Authorization: `Bearer ${token}`
+                    },
+                    params: {
+                        user_id: userId
                     }
                 })
                 const idOrder = response.data.id;

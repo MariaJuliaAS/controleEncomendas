@@ -10,6 +10,7 @@ import { ModalEditOrder } from "../../components/modalEditOrder";
 import { CiFilter } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 
+
 interface OrdersProps {
     id: string;
     name: string;
@@ -18,6 +19,7 @@ interface OrdersProps {
     adress: string;
     contact: string;
     observation?: string;
+    user_id: string;
 }
 
 export function Home() {
@@ -28,22 +30,24 @@ export function Home() {
     const [modalOpenAddOrder, setModalOpenAddOrder] = useState(false);
     const [modalOpenDetailsOrder, setModalOpenDetailsOrder] = useState(false);
     const [modalEditOrder, setModalEditOrder] = useState(false);
-    const [orderId, setOrderId] = useState("");
+    const [orderId, setOrderId] = useState<string>("");
     const navigate = useNavigate();
 
     useEffect(() => {
         async function loadOrders() {
             const token = localStorage.getItem("@tokenOrderFlow");
+            const userId = localStorage.getItem("@userIdOrderFlow");
 
             try {
                 const response = await api.get<OrdersProps[]>(
                     "/orders",
                     {
                         headers: {
-                            Authorization: `Bearer ${token}`
+                            Authorization: `Bearer ${token}`,
                         },
                         params: {
-                            order_by: filterDate
+                            order_by: filterDate,
+                            user_id: userId
                         }
                     }
                 );
@@ -76,6 +80,7 @@ export function Home() {
 
     function signOut() {
         localStorage.removeItem("@tokenOrderFlow");
+        localStorage.removeItem("@userIdOrderFlow");
         navigate("/login", { replace: true })
     }
 
