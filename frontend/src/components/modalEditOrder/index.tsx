@@ -5,7 +5,7 @@ import z from "zod";
 import { Input } from "../input";
 import { useEffect, useState, type FormEvent } from "react";
 import { api } from "../../service/api";
-import { FaEdit, FaPen } from "react-icons/fa";
+import { FaEdit, FaPen, FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { FiPlus } from "react-icons/fi";
 
@@ -149,6 +149,24 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
         }
     }
 
+    async function handleDeleteItem(id: string, e: FormEvent) {
+        e.preventDefault();
+        try {
+            await api.delete('/orders/itens', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                params: {
+                    item_id: id
+                }
+            })
+            toast.success("Item deletaco com sucesso!")
+        } catch (error) {
+            console.error("Erro ao deletar item:", error);
+            toast.error("Erro ao deletar item.");
+        }
+    }
+
     return (
         <div onClick={closeModal} className="bg-black/40 fixed inset-0 flex items-center justify-center z-10">
             <main onClick={(e) => e.stopPropagation()} className="max-h-11/12 overflow-y-auto bg-white w-11/12 max-w-xl h-auto flex flex-col rounded-lg p-8 ">
@@ -248,7 +266,7 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
                     ) : (
                         <div className="flex-col flex gap-2">
                             {orders?.itens?.map((item) => (
-                                <form key={item.id} onSubmit={(e) => editItem(item.id, e)} className="flex flex-row gap-2 mt-4">
+                                <form key={item.id} className="flex flex-row gap-2 mt-4">
                                     <div className="w-full">
                                         <input
                                             className="w-full border border-gray-200 rounded-lg px-2 h-10 outline-none focus:border-gray-400"
@@ -259,9 +277,14 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
                                             onChange={(e) => setNameItem(e.target.value)}
                                         />
                                     </div>
-                                    <button type="submit" className="bg-blue-600 rounded-lg px-3 flex items-center justify-center cursor-pointer transition-all hover:scale-105">
-                                        <FaPen size={18} className="text-white mt-1" />
-                                    </button>
+                                    <div className="flex gap-2">
+                                        <button onClick={(e) => handleDeleteItem(item.id, e)} type="submit" className="flex items-center justify-center cursor-pointer transition-all hover:scale-105">
+                                            <FaTrash size={18} className="text-red-600 mt-1" />
+                                        </button>
+                                        <button onClick={(e) => editItem(item.id, e)} type="submit" className="flex items-center justify-center cursor-pointer transition-all hover:scale-105">
+                                            <FaPen size={18} className="text-zinc-600 mt-1" />
+                                        </button>
+                                    </div>
                                 </form>
                             ))}
                         </div>
@@ -284,8 +307,8 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
                                     error={errors.nameItem?.message}
                                 />
                             </div>
-                            <button type="submit" className="bg-blue-600 rounded-lg px-2 h-10 flex items-center justify-center cursor-pointer transition-all hover:scale-105">
-                                <FiPlus size={24} className="text-white mt-1" />
+                            <button type="submit" className="flex items-center justify-center cursor-pointer transition-all hover:scale-105">
+                                <FiPlus size={28} className="text-zinc-600 mt-1" />
                             </button>
                         </form>
                     </div>

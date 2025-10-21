@@ -290,8 +290,8 @@ export function ModalAddOrder({ closeModal }: ModalProps) {
                                 error={errorsItem.nameItem?.message}
                             />
                         </div>
-                        <button type="submit" className="bg-blue-600 rounded-lg px-2 h-10 flex items-center justify-center cursor-pointer transition-all hover:scale-105">
-                            <FiPlus size={24} className="text-white mt-1" />
+                        <button type="submit" className="flex items-center justify-center cursor-pointer transition-all hover:scale-105">
+                            <FiPlus size={28} className="text-zinc-600 mt-1" />
                         </button>
                     </form>
 
