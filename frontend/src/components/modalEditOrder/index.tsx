@@ -7,6 +7,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { api } from "../../service/api";
 import { FaEdit, FaPen } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { FiPlus } from "react-icons/fi";
 
 interface ModalProps {
     closeModal: () => void;
@@ -38,8 +39,12 @@ const orderSchema = z.object({
     adress: z.string().optional(),
 })
 
+const schema = z.object({
+    nameItem: z.string().nonempty("Adicione a encomenda.")
+})
 
 type OrderFormData = z.infer<typeof orderSchema>
+type FormData = z.infer<typeof schema>;
 
 export function ModalEditOrder({ closeModal, id }: ModalProps) {
     const token = localStorage.getItem("@tokenOrderFlow");
@@ -49,7 +54,10 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
         resolver: zodResolver(orderSchema),
         mode: "onChange"
     })
-
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
+        resolver: zodResolver(schema),
+        mode: "onChange"
+    })
 
     useEffect(() => {
         async function getOrder() {
@@ -79,7 +87,7 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
         }
 
         getOrder();
-    }, [])
+    }, [onSubmitItem])
 
     async function editOrder(data: OrderFormData) {
         try {
@@ -123,6 +131,24 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
         }
     }
 
+    async function onSubmitItem(data: FormData) {
+        try {
+            await api.post("/orders/itens", {
+                order_id: id,
+                nameItem: data.nameItem
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            toast.success("Item adicionado com sucesso!")
+            reset()
+        } catch (error) {
+            console.error("Erro ao adicionar item:", error);
+            toast.error("Erro ao adicionar item.");
+        }
+    }
+
     return (
         <div onClick={closeModal} className="bg-black/40 fixed inset-0 flex items-center justify-center z-10">
             <main onClick={(e) => e.stopPropagation()} className="max-h-11/12 overflow-y-auto bg-white w-11/12 max-w-xl h-auto flex flex-col rounded-lg p-8 ">
@@ -134,7 +160,7 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
                     <MdOutlineClose onClick={closeModal} size={18} className="cursor-pointer text-zinc-700 transition-all duration-200 hover:text-red-500" />
                 </header>
 
-                <section className="my-4">
+                <section className="mt-4">
                     <div className="border-b border-gray-200 pb-2">
                         <p className="font-medium text-zinc-800 sm:text-lg text-base flex items-center gap-1">Dados do Cliente</p>
                     </div>
@@ -210,9 +236,9 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
                     </form>
                 </section>
 
-                <section>
+                <section className="my-4">
                     <div className="border-b border-gray-200 pb-2">
-                        <p className="font-medium text-zinc-800 sm:text-lg text-base flex items-center gap-1">Encomendas</p>
+                        <p className="font-medium text-zinc-800 sm:text-lg text-base flex items-center gap-1">Editar Encomendas</p>
                     </div>
 
                     {orders?.itens?.length === 0 ? (
@@ -231,7 +257,7 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
                                             name={`nameItem_${item.id}`}
                                             defaultValue={item.nameItem}
                                             onChange={(e) => setNameItem(e.target.value)}
-                                        /> {/*Tentar fazer pelo useForm*/}
+                                        />
                                     </div>
                                     <button type="submit" className="bg-blue-600 rounded-lg px-3 flex items-center justify-center cursor-pointer transition-all hover:scale-105">
                                         <FaPen size={18} className="text-white mt-1" />
@@ -241,6 +267,28 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
                         </div>
                     )}
 
+                </section>
+
+                <section className="mb-4">
+                    <div className="border-b border-gray-200 pb-2">
+                        <p className="font-medium text-zinc-800 sm:text-lg text-base flex items-center gap-1">Adicionar encomendas</p>
+                    </div>
+                    <div className="flex-col flex gap-2 ">
+                        <form onSubmit={handleSubmit(onSubmitItem)} className="flex flex-row gap-2 mt-4">
+                            <div className="flex-2">
+                                <Input
+                                    placeholder="Adicionar encomenda"
+                                    type="text"
+                                    name="nameItem"
+                                    register={register}
+                                    error={errors.nameItem?.message}
+                                />
+                            </div>
+                            <button type="submit" className="bg-blue-600 rounded-lg px-2 h-10 flex items-center justify-center cursor-pointer transition-all hover:scale-105">
+                                <FiPlus size={24} className="text-white mt-1" />
+                            </button>
+                        </form>
+                    </div>
                 </section>
             </main>
         </div>

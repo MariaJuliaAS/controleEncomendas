@@ -1,7 +1,7 @@
 import { PiSignOutBold } from "react-icons/pi";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { GiCardboardBoxClosed } from "react-icons/gi";
-import { FaUser, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { FaUser, FaEdit, FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { api } from "../../service/api";
 import { ModalAddOrder } from "../../components/modalAddOrder";
@@ -9,7 +9,6 @@ import { ModalDetailsOrders } from "../../components/modalDetailsOrders";
 import { ModalEditOrder } from "../../components/modalEditOrder";
 import { CiFilter } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
-import { ModalAddItem } from "../../components/modalAddItem";
 
 
 interface OrdersProps {
@@ -31,7 +30,6 @@ export function Home() {
     const [modalOpenAddOrder, setModalOpenAddOrder] = useState(false);
     const [modalOpenDetailsOrder, setModalOpenDetailsOrder] = useState(false);
     const [modalEditOrder, setModalEditOrder] = useState(false);
-    const [modalAddItem, setModalAddItem] = useState(false);
     const [orderId, setOrderId] = useState<string>("");
     const navigate = useNavigate();
 
@@ -192,9 +190,6 @@ export function Home() {
                                                 </td>
                                                 <td data-label="Ações" className="py-4 px-2 block lg:table-cell lg:px-0 before:content-[attr(data-label)] before:font-medium before:text-gray-500 before:block lg:before:hidden before:float-left lg:text-center text-right">
                                                     <div className="flex gap-2 mt-2 lg:justify-center justify-end">
-                                                        <button onClick={() => { setModalAddItem(true), setOrderId(item.id) }}>
-                                                            <FaPlus size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
-                                                        </button>
                                                         <button onClick={() => { setModalOpenDetailsOrder(true), setOrderId(item.id) }}>
                                                             <FaUser size={20} className="text-zinc-600 cursor-pointer transition-all hover:scale-120" />
                                                         </button>
@@ -220,7 +215,6 @@ export function Home() {
                 {modalOpenAddOrder && <ModalAddOrder closeModal={() => { setModalOpenAddOrder(false), window.location.reload() }} />}
                 {modalOpenDetailsOrder && <ModalDetailsOrders id={orderId} closeModal={() => setModalOpenDetailsOrder(false)} />}
                 {modalEditOrder && <ModalEditOrder id={orderId} closeModal={() => { setModalEditOrder(false), window.location.reload() }} />}
-                {modalAddItem && <ModalAddItem id={orderId} closeModal={() => setModalAddItem(false)} />}
 
             </main>
         </div>
