@@ -2,6 +2,7 @@ import { MdOutlineClose } from "react-icons/md";
 import { GiCardboardBoxClosed } from "react-icons/gi";
 import { useEffect, useState } from "react";
 import { api } from "../../service/api";
+import { Loading } from "../loading/loading";
 
 interface OrdersProps {
     id: string;
@@ -28,6 +29,7 @@ interface ModalProps {
 export function ModalDetailsOrders({ id, closeModal }: ModalProps) {
     const token = localStorage.getItem("@tokenOrderFlow");
     const [orders, setOrders] = useState<OrdersProps>();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function getOrders() {
@@ -44,6 +46,8 @@ export function ModalDetailsOrders({ id, closeModal }: ModalProps) {
                 setOrders(response.data)
             } catch (error) {
                 console.log("Erro ao buscar pedidos " + error)
+            } finally {
+                setLoading(false)
             }
         }
 
@@ -104,6 +108,9 @@ export function ModalDetailsOrders({ id, closeModal }: ModalProps) {
                         </div>
                     </div>
                 </section>
+
+                {loading && <Loading />}
+
             </main>
         </div>
     )

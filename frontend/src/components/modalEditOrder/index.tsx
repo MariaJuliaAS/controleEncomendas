@@ -8,6 +8,7 @@ import { api } from "../../service/api";
 import { FaEdit, FaPen, FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { FiPlus } from "react-icons/fi";
+import { Loading } from "../loading/loading";
 
 interface ModalProps {
     closeModal: () => void;
@@ -50,6 +51,7 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
     const token = localStorage.getItem("@tokenOrderFlow");
     const [orders, setOrders] = useState<OrdersProps>();
     const [nameItem, setNameItem] = useState<string>("");
+    const [loading, setLoading] = useState(true);
     const { register: registerOrder, handleSubmit: submitOrder, formState: { errors: errorsOrder }, reset: resetOrder } = useForm<OrderFormData>({
         resolver: zodResolver(orderSchema),
         mode: "onChange"
@@ -83,6 +85,8 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
                 })
             } catch (error) {
                 console.log("Erro ao buscar pedidos " + error)
+            } finally {
+                setLoading(false)
             }
         }
 
@@ -260,7 +264,7 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
                     </div>
 
                     {orders?.itens?.length === 0 ? (
-                        <div>
+                        <div className="my-2">
                             <p>Nenhum item foi cadastrado.</p>
                         </div>
                     ) : (
@@ -313,6 +317,9 @@ export function ModalEditOrder({ closeModal, id }: ModalProps) {
                         </form>
                     </div>
                 </section>
+
+                {loading && <Loading />}
+
             </main>
         </div>
     )

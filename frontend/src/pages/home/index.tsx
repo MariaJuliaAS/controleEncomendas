@@ -9,6 +9,7 @@ import { ModalDetailsOrders } from "../../components/modalDetailsOrders";
 import { ModalEditOrder } from "../../components/modalEditOrder";
 import { CiFilter } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
+import { Loading } from "../../components/loading/loading";
 
 
 interface OrdersProps {
@@ -32,6 +33,7 @@ export function Home() {
     const [modalEditOrder, setModalEditOrder] = useState(false);
     const [orderId, setOrderId] = useState<string>("");
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function loadOrders() {
@@ -54,6 +56,8 @@ export function Home() {
                 setOrders(response.data);
             } catch (error) {
                 console.log("Erro ao carregar encomendas " + error)
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -215,6 +219,7 @@ export function Home() {
                 {modalOpenAddOrder && <ModalAddOrder closeModal={() => { setModalOpenAddOrder(false), window.location.reload() }} />}
                 {modalOpenDetailsOrder && <ModalDetailsOrders id={orderId} closeModal={() => setModalOpenDetailsOrder(false)} />}
                 {modalEditOrder && <ModalEditOrder id={orderId} closeModal={() => { setModalEditOrder(false), window.location.reload() }} />}
+                {loading && <Loading />}
 
             </main>
         </div>
