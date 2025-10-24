@@ -105,7 +105,7 @@ export function Home() {
                 <header className="flex  justify-between items-center w-full">
                     <div>
                         <h1 className="text-zinc-800 font-bold lg:text-3xl md:text-2xl text-xl flex items-center gap-2">
-                            Controle de Encomendas
+                            OrderFlow
                             <GiCardboardBoxClosed size={28} className="text-zinc-800 mt-2" />
                         </h1>
                         <p className="text-zinc-600">Tenha controle do seu negócio, acompanhe cada encomenda.</p>
